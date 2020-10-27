@@ -1,6 +1,6 @@
 import arcade
 import os
-
+import numpy as np
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
 SCREEN_TITLE = "Snails Game Show"
@@ -40,15 +40,17 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.player = None
         self.player2 = None
-
+        #2D Board Initialization
+        self.board_2d = np.zeros(100)
+        self.board_2d = self.board_2d.reshape(10,10)
+        print(self.board_2d.shape)
+        print(self.board_2d[9][9],end=' ')
     def on_draw(self):
         """
         Render the screen.
         """
-
         # This command has to happen before we start drawing
         arcade.start_render()
-
         # Draw the background texture
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -61,22 +63,26 @@ class MyGame(arcade.Window):
         for i in range(0,800,80):
             arcade.draw_line(i,0,i,800,arcade.color.BLACK,4)
             arcade.draw_line(0,i,800,i,arcade.color.BLACK,4)
+
+
         # Sprite lists
         self.player_list = arcade.SpriteList()
         self.player = arcade.Sprite("snail.jpg",0.33)
         self.player2 = arcade.Sprite("snail2.jpg",0.09)
-        self.player2.width = 72
         self.player2.height = 72
         self.player2.width = 72
         self.player.height = 73
-        self.player.center_x = 41
-        self.player.center_y = 40
-        self.player2.center_x = 759
-        self.player2.center_y = 760
-        self.player_list.append(self.player)
-        self.player_list.append(self.player2)
-        self.player.draw()
-        self.player2.draw()
+        if(self.board_2d[0][0]==0 and self.board_2d[9][9]==0):
+            self.player.center_x = 41
+            self.player.center_y = 40
+            self.player_list.append(self.player)
+            self.player.draw()
+            self.player2.center_x = 759
+            self.player2.center_y = 760
+            self.player_list.append(self.player2)
+            self.player2.draw()
+        else:
+            print("Initialization is done")
 
 
         
