@@ -274,7 +274,7 @@ class Game(arcade.View):
             while(True):
                 if self.board[x][y] == 0 or self.board[x][y] == 11 or self.board[x][y] == 1:
                     self.board[self.position2[0]][self.position2[1]] = 22
-                    sdown_slipelf.board[x-1][y] = 2
+                    self.board[x-1][y] = 2
                     self.position2 = x-1,y
                     self.turn = "Player'1'"
                     break
