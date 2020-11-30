@@ -167,12 +167,14 @@ class Game(arcade.View):
                     self.board[x][y+1] = 2
                     self.position2 = x,y+1
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 elif y == 0 :
                     self.board[self.position2[0]][self.position2[1]] = 22
                     self.board[x][y] = 2
                     self.position2 = x,y
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 else:
                     y = y-1
@@ -203,12 +205,14 @@ class Game(arcade.View):
                     self.board[x][y-1] = 2
                     self.position2 = x,y-1
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 elif y == 9 :
                     self.board[self.position2[0]][self.position2[1]] = 22
                     self.board[x][y] = 2
                     self.position2 = x,y
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 else:
                     y = y+1
@@ -239,12 +243,14 @@ class Game(arcade.View):
                     self.board[x+1][y] = 2
                     self.position2 = x+1,y
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 elif x == 0 :
                     self.board[self.position2[0]][self.position2[1]] = 22
                     self.board[x][y] = 2
                     self.position2 = x,y
                     self.turn = "A.I AgentS"
+                    self.AI_Agent__move()
                     break
                 else:
                     x = x-1
@@ -275,12 +281,14 @@ class Game(arcade.View):
                     self.board[x-1][y] = 2
                     self.position2 = x-1,y
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 elif x == 9 :
                     self.board[self.position2[0]][self.position2[1]] = 22
                     self.board[x][y] = 2
                     self.position2 = x,y
                     self.turn = "A.I Agent"
+                    self.AI_Agent__move()
                     break
                 else:
                     x = x+1
@@ -292,50 +300,94 @@ class Game(arcade.View):
                 self.state = "GameOn"
     #Heuristic function for minimax to choose the best possible move
     def heuristic(self,row,col,direction):
-        counter = 0
+        counter = 1
         for i in range(10):
             for j in range(10):
                 if self.board[i][j] == 11:
                     counter = counter + 1
         if direction == "left":
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                pass
+            else:
+                counter = counter + 10
+            if col-1 >= 0:
+                if self.board[row][col-1] == 22 or self.board[row][col-1] == 2:
+                    return -1
             for i in range(10):
                 col = col - 1
                 if col > 9 or col < 0:
                     return counter
-                if self.board[row][col] == 0:
+                if self.board[row][col] == 22 or self.board[row][col] == 2:
+                    return counter
+                elif self.board[row][col] == 11:
+                    continue
+                elif self.board[row][col] == 0:
                     counter = counter + 1
                 else:
                     return counter
         elif direction == "right":
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                pass
+            else:
+                counter = counter + 10
+            if col+1 <= 9:
+                if self.board[row][col+1] == 22 or self.board[row][col+1] == 2:
+                    return -1
             for i in range(10):
                 col = col + 1
                 if col > 9 or col < 0:
                     return counter
+                if self.board[row][col] == 22 or self.board[row][col] == 2:
+                    return counter
+                elif self.board[row][col] == 11:
+                    continue
                 elif self.board[row][col] == 0:
                     counter = counter + 1
                 else:
                     return counter
         elif direction == "up":
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                pass
+            else:
+                counter = counter + 10
+            if row-1 >= 0:
+                if self.board[row-1][col] == 22 or self.board[row-1][col] == 2:
+                    return -1
+                
             for i in range(10):
                 row = row - 1
                 if row > 9 or row < 0:
                     return counter
-                if self.board[row][col] == 0:
+                if self.board[row][col] == 22 or self.board[row][col] == 2:
+                    return counter
+                elif self.board[row][col] == 11:
+                    continue
+                elif self.board[row][col] == 0:
                     counter = counter + 1
                 else:
                     return counter
         elif direction == "down":
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                pass
+            else:
+                counter = counter + 10
+            if row+1 <= 9:
+                if self.board[row+1][col] == 22 or self.board[row+1][col] == 2:
+                    return -1
             for i in range(10):
                 row = row + 1
                 if row > 9 or row < 0:
                     return counter
-                if self.board[row][col] == 0:
+                if self.board[row][col] == 22 or self.board[row][col] == 2:
+                    return counter
+                elif self.board[row][col] == 11:
+                    continue
+                elif self.board[row][col] == 0:
                     counter = counter + 1
                 else:
                     return counter
     #Minimax function for 2d snail game
     def minimax(self):
-        print("Hi")
         best_score = []
         row = self.position1[0]
         col = self.position1[1]
@@ -348,60 +400,79 @@ class Game(arcade.View):
         down_score = self.heuristic(row,col,"down")
         best_score.append([down_score,"down"])
         sorted_best_score = sorted(best_score,key = lambda x:x[0],reverse = True)
-        return sorted_best_score[0][1]
+        print(sorted_best_score)
+        if sorted_best_score[0][1] == -1:
+            return "Invalid"
+        else:
+            return sorted_best_score[0][1]
     #Function for A.I agent move
     def AI_Agent__move(self):
+        self.turn = "A.I Agent"
         row = self.position1[0]
         col = self.position1[1]
         best_move = self.minimax()
-        if best_move == "left":
-            self.board[self.position1[0]][self.position1[1]] = 11
-            self.position1 = row,col-1
-            self.board[row][col-1] = 1
-            self.score1 += 1
+        if best_move == "Invalid":
             self.turn = "Human"
-            if self.score1 >= 49 :
-                if self.score1 == 49 and self.score2 == 49:
-                    self.win = "Match Draw"
+        elif best_move == "left":
+            if self.board[row][col-1] == 11:
+                self.left_slip(1)
+            else:
+                self.board[self.position1[0]][self.position1[1]] = 11
+                self.position1 = row,col-1
+                self.board[row][col-1] = 1
+                self.score1 += 1
+                self.turn = "Human"
+                if self.score1 >= 49 :
+                    if self.score1 == 49 and self.score2 == 49:
+                        self.win = "Match Draw"
+                        self.state = "GameEnd"
                     self.state = "GameEnd"
-                self.state = "GameEnd"
-                self.win = "A.I Agent Win"
+                    self.win = "A.I Agent Win"
         elif best_move == "right":
-            self.board[self.position1[0]][self.position1[1]] = 11
-            self.position1 = row,col+1
-            self.board[row][col+1] = 1
-            self.score1 += 1
-            self.turn = "Human"
-            if self.score1 >= 49 :
-                if self.score1 == 49 and self.score2 == 49:
-                    self.win = "Match Draw"
+            if self.board[row][col+1] == 11:
+                self.right_slip(1)
+            else:
+                self.board[self.position1[0]][self.position1[1]] = 11
+                self.position1 = row,col+1
+                self.board[row][col+1] = 1
+                self.score1 += 1
+                self.turn = "Human"
+                if self.score1 >= 49 :
+                    if self.score1 == 49 and self.score2 == 49:
+                        self.win = "Match Draw"
+                        self.state = "GameEnd"
                     self.state = "GameEnd"
-                self.state = "GameEnd"
-                self.win = "A.I Agent Win"
+                    self.win = "A.I Agent Win"
         elif best_move == "up":
-            self.board[self.position1[0]][self.position1[1]] = 11
-            self.position1 = row-1,col
-            self.board[row-1][col] = 1
-            self.score1 += 1
-            self.turn = "Human"
-            if self.score1 >= 49 :
-                if self.score1 == 49 and self.score2 == 49:
-                    self.win = "Match Draw"
+            if self.board[row-1][col] == 11:
+                self.up_slip(1)
+            else:
+                self.board[self.position1[0]][self.position1[1]] = 11
+                self.position1 = row-1,col
+                self.board[row-1][col] = 1
+                self.score1 += 1
+                self.turn = "Human"
+                if self.score1 >= 49 :
+                    if self.score1 == 49 and self.score2 == 49:
+                        self.win = "Match Draw"
+                        self.state = "GameEnd"
                     self.state = "GameEnd"
-                self.state = "GameEnd"
-                self.win = "A.I Agent Win"
+                    self.win = "A.I Agent Win"
         elif best_move == "down":
-            self.board[self.position1[0]][self.position1[1]] = 11
-            self.position1 = row+1,col
-            self.board[row+1][col] = 1
-            self.score1 += 1
-            self.turn = "Human"
-            if self.score1 >= 49 :
-                if self.score1 == 49 and self.score2 == 49:
-                    self.win = "Match Draw"
+            if self.board[row+1][col] == 11:
+                self.down_slip(1)
+            else:
+                self.board[self.position1[0]][self.position1[1]] = 11
+                self.position1 = row+1,col
+                self.board[row+1][col] = 1
+                self.score1 += 1
+                self.turn = "Human"
+                if self.score1 >= 49 :
+                    if self.score1 == 49 and self.score2 == 49:
+                        self.win = "Match Draw"
+                        self.state = "GameEnd"
                     self.state = "GameEnd"
-                self.state = "GameEnd"
-                self.win = "A.I Agent Win"
+                    self.win = "A.I Agent Win"
     def on_mouse_press(self, x, y, _button, _modifiers):
         if self.state == "GameOn" :
             # Player2 turn
@@ -423,7 +494,6 @@ class Game(arcade.View):
                         self.position2 = i,j
                         self.board[i][j] = 2
                         self.score2 += 1
-                        self.turn = "A.I Agent"
                         self.AI_Agent__move()
                         if self.score2 >= 49 :
                             if self.score1 == 49 and self.score2 == 49:
@@ -432,14 +502,15 @@ class Game(arcade.View):
                             self.state = "GameEnd"
                             self.win = "Human Win"
                     else :
-                        self.turn = "A.I Agent"
                         self.AI_Agent__move()
+                        
                 else:
-                    self.turn = "A.I Agent"
                     self.AI_Agent__move()
+        #Wait for A.I Agent turn
+        elif self.state == "A.I Agent":
+            pass
         # Play again process
         elif self.state == "GameEnd":
-            print(x,y)
             if 250 <= x <= 450 and 60 <= y <= 140:
                 self.state == "GameMenu"
                 self.board.clear()
