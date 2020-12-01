@@ -300,19 +300,20 @@ class Game(arcade.View):
                 self.state = "GameOn"
     #Heuristic function for minimax to choose the best possible move
     def heuristic(self,row,col,direction):
-        counter = 1
+        counter = 0
         for i in range(10):
             for j in range(10):
                 if self.board[i][j] == 11:
                     counter = counter + 1
         if direction == "left":
-            if row == 9 or col == 0 or row == 0 or col == 9:
-                pass
-            else:
-                counter = counter + 10
             if col-1 >= 0:
                 if self.board[row][col-1] == 22 or self.board[row][col-1] == 2:
                     return -1
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                if col-1 < 0:
+                    return -1
+            else:
+                counter = counter + 10
             for i in range(10):
                 col = col - 1
                 if col > 9 or col < 0:
@@ -326,13 +327,14 @@ class Game(arcade.View):
                 else:
                     return counter
         elif direction == "right":
-            if row == 9 or col == 0 or row == 0 or col == 9:
-                pass
-            else:
-                counter = counter + 10
             if col+1 <= 9:
                 if self.board[row][col+1] == 22 or self.board[row][col+1] == 2:
                     return -1
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                if col+1 > 9:
+                    return -1
+            else:
+                counter = counter + 10
             for i in range(10):
                 col = col + 1
                 if col > 9 or col < 0:
@@ -346,14 +348,14 @@ class Game(arcade.View):
                 else:
                     return counter
         elif direction == "up":
-            if row == 9 or col == 0 or row == 0 or col == 9:
-                pass
-            else:
-                counter = counter + 10
             if row-1 >= 0:
                 if self.board[row-1][col] == 22 or self.board[row-1][col] == 2:
                     return -1
-                
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                if row-1 < 0:
+                    return -1
+            else:
+                counter = counter + 10                
             for i in range(10):
                 row = row - 1
                 if row > 9 or row < 0:
@@ -367,13 +369,14 @@ class Game(arcade.View):
                 else:
                     return counter
         elif direction == "down":
-            if row == 9 or col == 0 or row == 0 or col == 9:
-                pass
-            else:
-                counter = counter + 10
             if row+1 <= 9:
                 if self.board[row+1][col] == 22 or self.board[row+1][col] == 2:
                     return -1
+            if row == 9 or col == 0 or row == 0 or col == 9:
+                if row+1 > 9:
+                    return -1
+            else:
+                counter = counter + 10
             for i in range(10):
                 row = row + 1
                 if row > 9 or row < 0:
@@ -400,7 +403,6 @@ class Game(arcade.View):
         down_score = self.heuristic(row,col,"down")
         best_score.append([down_score,"down"])
         sorted_best_score = sorted(best_score,key = lambda x:x[0],reverse = True)
-        print(sorted_best_score)
         if sorted_best_score[0][1] == -1:
             return "Invalid"
         else:
