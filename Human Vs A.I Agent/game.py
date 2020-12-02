@@ -313,7 +313,7 @@ class Game(arcade.View):
                 if col-1 < 0:
                     return -1
             else:
-                counter = counter + 10
+                counter = counter
             for i in range(10):
                 col = col - 1
                 if col > 9 or col < 0:
@@ -322,8 +322,10 @@ class Game(arcade.View):
                     return counter
                 elif self.board[row][col] == 11:
                     continue
-                elif self.board[row][col] == 0:
-                    counter = counter + 1
+                elif self.board[row][col] == 0 and self.board[row][col+1] != 11:
+                    counter = counter + 2
+                elif self.board[row][col] == 0 and self.board[row][col+1] == 11:
+                    counter = counter + 0.1
                 else:
                     return counter
         elif direction == "right":
@@ -334,7 +336,7 @@ class Game(arcade.View):
                 if col+1 > 9:
                     return -1
             else:
-                counter = counter + 10
+                counter = counter
             for i in range(10):
                 col = col + 1
                 if col > 9 or col < 0:
@@ -343,8 +345,10 @@ class Game(arcade.View):
                     return counter
                 elif self.board[row][col] == 11:
                     continue
-                elif self.board[row][col] == 0:
-                    counter = counter + 1
+                elif self.board[row][col] == 0 and self.board[row][col-1] != 11:
+                    counter = counter + 2
+                elif self.board[row][col] == 0 and self.board[row][col-1] == 11:
+                    counter = counter + 0.1
                 else:
                     return counter
         elif direction == "up":
@@ -355,7 +359,7 @@ class Game(arcade.View):
                 if row-1 < 0:
                     return -1
             else:
-                counter = counter + 10                
+                counter = counter              
             for i in range(10):
                 row = row - 1
                 if row > 9 or row < 0:
@@ -364,8 +368,10 @@ class Game(arcade.View):
                     return counter
                 elif self.board[row][col] == 11:
                     continue
-                elif self.board[row][col] == 0:
-                    counter = counter + 1
+                elif self.board[row][col] == 0 and self.board[row+1][col] != 11:
+                    counter = counter + 2
+                elif self.board[row][col] == 0 and self.board[row+1][col] == 11:
+                    counter = counter + 0.1
                 else:
                     return counter
         elif direction == "down":
@@ -376,7 +382,7 @@ class Game(arcade.View):
                 if row+1 > 9:
                     return -1
             else:
-                counter = counter + 10
+                counter = counter
             for i in range(10):
                 row = row + 1
                 if row > 9 or row < 0:
@@ -385,12 +391,14 @@ class Game(arcade.View):
                     return counter
                 elif self.board[row][col] == 11:
                     continue
-                elif self.board[row][col] == 0:
-                    counter = counter + 1
+                elif self.board[row][col] == 0 and self.board[row-1][col] != 11:
+                    counter = counter + 2
+                elif self.board[row][col] == 0 and self.board[row-1][col] == 11:
+                    counter = counter + 0.1
                 else:
                     return counter
     #Minimax function for 2d snail game
-    def minimax(self):
+    def minimax(self):  
         best_score = []
         row = self.position1[0]
         col = self.position1[1]

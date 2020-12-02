@@ -1,6 +1,5 @@
 import arcade
-import random
-
+import sys
 SCREEN_TITLE=" Welcome to Snails Game "
 # Importing Images use in the game
 Background_image = arcade.load_texture("background.jpg")
@@ -365,9 +364,7 @@ class Game(arcade.View):
                 reset = Game()
                 self.window.show_view(reset)
             elif 550 <= x <= 750 and 60 <= y <= 140:
-                exit(0)
-
-
+                sys.exit()
 
 
 if __name__ == "__main__":
